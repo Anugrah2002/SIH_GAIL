@@ -2,24 +2,18 @@ import { StyleSheet, Text, View,Button } from 'react-native';
 
 
 
-const Homepage =  ({ navigation })=>  {
+const VerificationPage =  ({ navigation })=>  {
   return (
     <View style={styles.container}>
-      <Text style={styles.infotext}>Welcome to the GAIL Premises</Text>
-      <Text style={styles.welcometext}>Fill Up the Employee Form by clicking on the button given 
-                below and start using facilities serving by Gas Authority of India Ltd.
+      <Text style={styles.infotext}>Welcome </Text>
+      <Text style={styles.welcometext}>Welcome User you have successfully created your account, but you cannot use the facility until the owner willbe verifying you
+
+      Thankyou!
+      Please Go Back to login page.
           </Text>
           <View style={styles.button}>
             <Button title='Login'
              onPress={() =>navigation.navigate('Login') }/>
-        </View>
-        <View style={styles.button2}>
-        <Button title='Signup'
-             onPress={() =>navigation.navigate('Employeeform') }/>
-        </View>
-        <View style={styles.button2}>
-        <Button title='face'
-             onPress={() =>navigation.navigate('uploadpicture') }/>
         </View>
       </View>
 
@@ -59,4 +53,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Homepage
+export default VerificationPage
