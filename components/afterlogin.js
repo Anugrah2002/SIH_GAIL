@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Platform, Text, View, StyleSheet, Button } from 'react-native';
 import * as Location from 'expo-location';
 import { Camera } from 'expo-camera';
+import { DataContext } from '../context/context';
 
 
 
 
 const AfterLogin =  ({ navigation, route})=>  {
-  const [location, setLocation] = useState(null);
+  const { locationstore } = useContext(DataContext);
+  const [location, setLocation] = locationstore;
   const [errorMsg, setErrorMsg] = useState(null);
   const[hasPermission, setHaspermission] = useState('')
 

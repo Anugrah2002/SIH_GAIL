@@ -10,12 +10,14 @@ import LoginPage from './components/loginform';
 import VerificationPage from './components/verificationpage';
 import TakePhotoAndUpload from './components/uploadpicture';
 import Timeofattendence from './components/timeofattendence';
+import { DataProvider } from './context/context';
 
 
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {
   return (
+    <DataProvider>
     <NavigationContainer>
       <Stack.Navigator>
       <Stack.Screen name="Home" component={Homepage}/>
@@ -29,6 +31,7 @@ const MyStack = () => {
       <Stack.Screen name='timeofattendence' component={Timeofattendence}/>
       </Stack.Navigator>
     </NavigationContainer>
+    </DataProvider>
   );
 };
 export default MyStack

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import {
   ActivityIndicator,
   Button,
@@ -13,16 +13,20 @@ import {
 } from 'react-native';
 import { Constants, Permissions } from 'expo';
 import * as ImagePicker from 'expo-image-picker';
-export default class TakePhotoAndUpload extends Component {
+import { DataContext } from '../context/context';
+const TakePhotoAndUpload =() => {
   state = {
     image: null,
     uploading: false,
   };
 
-  render() {
     let {
       image
     } = this.state;
+
+    const { locationstore } = useContext(DataContext);
+    const [location, setLocation] = locationstore;
+    console.log(locationstore.coords.latitude)
 
     return (
       <View style={styles.container}>
@@ -145,7 +149,6 @@ export default class TakePhotoAndUpload extends Component {
       });
     }
   };
-}
 
 async function uploadImageAsync(uri) {
   let apiUrl = 'https://8000-anshulakotiya-sihgail-o32qjuu43i7.ws-us38.gitpod.io/userAttendance/';
@@ -226,3 +229,5 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   }
 });
+
+export default TakePhotoAndUpload
