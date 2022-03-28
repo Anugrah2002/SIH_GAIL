@@ -179,7 +179,13 @@ async function uploadImageAsync(uri) {
         'content-type': 'multipart/form-data',
       },
       
+    }).then((response) => response.json())
+    .then((json) => {
+      console.log(json);
     })
+    .catch((error) => {
+      console.error(error);
+    });
 }
 
 const styles = StyleSheet.create({
