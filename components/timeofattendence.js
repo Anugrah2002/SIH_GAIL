@@ -1,21 +1,19 @@
+import { TabRouter } from '@react-navigation/native';
 import { StyleSheet, Text, View,Button } from 'react-native';
 
 
 
-const Homepage =  ({ navigation })=>  {
+const Timeofattendence =  ({ navigation, route })=>  {
   return (
     <View style={styles.container}>
-      <Text style={styles.infotext}>Welcome to the VIT Bhopal Premises</Text>
-      <Text style={styles.welcometext}>Fill Up the Employee Form by clicking on the button given 
-                below and start using facilities serving by VIT Bhopal.
-          </Text>
+      <Text style={styles.infotext}>Welcome to the GAIL Premises</Text>
           <View style={styles.button}>
-            <Button title='Login'
-             onPress={() =>navigation.navigate('Login') }/>
+            <Button title='Entering the Campus'
+             onPress={() =>navigation.navigate('uploadpicture',{userno:route.params.userno,locate:route.params.locate}) }/>
         </View>
         <View style={styles.button2}>
-        <Button title='Signup'
-             onPress={() =>navigation.navigate('Employeeform') }/>
+        <Button title='Exiting the campus'
+             onPress={() =>navigation.navigate('uploadpicture') }/>
         </View>
         {/* <View style={styles.button2}>
         <Button title='face'
@@ -59,4 +57,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Homepage
+export default Timeofattendence

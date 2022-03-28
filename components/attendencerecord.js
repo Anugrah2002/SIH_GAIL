@@ -1,48 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { Platform, Text, View, StyleSheet, Button } from 'react-native';
-import * as Location from 'expo-location';
-import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
+
+import { View, StyleSheet } from 'react-native';
+import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component';
+import React,{useState} from 'react';
+import axios from 'axios';
 
 
 
+const Attendencerecord= ({navigation,route}) => {
+  const[attendancedata, setAttendancedata] = useState();
+  axios.post('https://8000-anshulakotiya-sihgail-o32qjuu43i7.ws-us38.gitpod.io/attendanceRecord/', {
+    emp_no:route.params.userno,
 
-const Attendencerecord =  ({ navigation })=>  {
+  },
+   { 
+    })
+  .then(response => {  
+      // If request is good...
+      console.log(response.data);
+   })
+  .catch((error) => {
+      console.log('error ' + error);
+   });
 
+  const CONTENT = {
+    tableHead: ['Name', 'Employee Number', 'Mobile', 'Date', ' Time'],
+    tableData: [
+      ['1', '2', '3'],
+      ['a', 'b', 'c'],
+      ['1', '2', '3'],
+      ['a', 'b', 'c'],
+    ],
+  };
   return (
-    <View style={{ marginTop: 50 }}>
-      <Text>Attendence</Text>
+    <View style={styles.container}>
+      <Table borderStyle={{ borderWidth: 1 }}>
+        <Row
+          data={CONTENT.tableHead}
+          flexArr={[1, 2, 1, 1]}
+          style={styles.head}
+        />
+        <TableWrapper style={styles.wrapper}>
+          <Col
+            data={CONTENT.tableTitle}
+            style={styles.title}
+            heightArr={[28, 28]}
+          />
+          <Rows
+            data={CONTENT.tableData}
+            flexArr={[2, 1, 1]}
+            style={styles.row}
+          />
+        </TableWrapper>
+      </Table>
     </View>
-
-
   );
 }
 
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#3B5380',
-  },
-  infotext:{
-    fontSize:30,
-    marginTop:40,
-    color:'white',
-    marginLeft:20,
-    
-  },
-  button1:{
-    marginTop:200,
-    marginLeft:50,
-    marginRight:50,
-
-  },
-  button2:{
-    paddingTop:20,
-    marginLeft:50,
-    marginRight:50,
-
-  },
-
+  container: { flex: 1, padding: 16, paddingTop: 100, backgroundColor: '#fff' },
+  head: { height: 40, backgroundColor: 'orange' },
+  wrapper: { flexDirection: 'row' },
+  title: { flex: 1, backgroundColor: '#2ecc71' },
+  row: { height: 28 },
+  text: { textAlign: 'center' },
 });
+
 
 export default Attendencerecord

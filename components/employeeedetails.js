@@ -26,7 +26,7 @@ const  Employeedetail = ({ navigation }) => {
   }
   else{
   axios
-      .post('https://sih-gail.herokuapp.com/userSignup/', {   //ALWAYS USE http:// BEFORE THE URL
+      .post('https://8000-anshulakotiya-sihgail-o32qjuu43i7.ws-us38.gitpod.io/userSignup/', {   //ALWAYS USE http:// BEFORE THE URL
         emp_name:fullname ,   // THE KEY NAME HAS TO BE SAME AS THE MODEL FIELD IN DJANGO MODEL AND ALWAYS USE SERIALIZER
         emp_desig:designation ,   // THE KEY NAME HAS TO BE SAME AS THE MODEL FIELD IN DJANGO MODEL AND ALWAYS USE SERIALIZER
         emp_no: employeenumber,   // THE KEY NAME HAS TO BE SAME AS THE MODEL FIELD IN DJANGO MODEL AND ALWAYS USE SERIALIZER

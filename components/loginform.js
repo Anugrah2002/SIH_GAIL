@@ -20,7 +20,7 @@ const LoginPage =  ({ navigation })=>  {
       }
     else{
       axios
-          .post('https://sih-gail.herokuapp.com/userLogin/', {  
+          .post('https://8000-anshulakotiya-sihgail-o32qjuu43i7.ws-us38.gitpod.io/userLogin/', {  
             username: employeenumber,   // THE KEY NAME HAS TO BE SAME AS THE MODEL FIELD IN DJANGO MODEL AND ALWAYS USE SERIALIZER
             password: passwords,   // THE KEY NAME HAS TO BE SAME AS THE MODEL FIELD IN DJANGO MODEL AND ALWAYS USE SERIALIZER
           })
@@ -30,7 +30,10 @@ const LoginPage =  ({ navigation })=>  {
             {
               Alert.alert("Logged in Successfully.");
               navigation.navigate('Afterlogin',{user:employeenumber})
-            }else{
+            }else if(response.data.status === 'user not active'){
+              navigation.navigate('verification')
+            }
+            else{
               Alert.alert('Enter the valid credentials')
             }
               }).catch((error) => {

@@ -1,23 +1,170 @@
-import React,{useState,useEffect, useRef } from 'react';
-import { StyleSheet, Text, View,Button, TextInput, Alert, Pressable } from 'react-native';
-import { Camera } from 'expo-camera';
-import * as FaceDetector from  'expo-face-detector'; 
-import axios from 'axios';
+import React, { Component } from 'react';
+import {
+  ActivityIndicator,
+  Button,
+  Clipboard,
+  Image,
+  Share,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+} from 'react-native';
+import { Constants, Permissions } from 'expo';
 import * as ImagePicker from 'expo-image-picker';
 
-async function TakePhotoAndUpload() {
+export default class TakePhotoAndUpload extends Component {
+  state = {
+    image: null,
+    uploading: false,
+  };
 
-    let result = await ImagePicker.launchCameraAsync({
-      allowsEditing: false, // higher res on iOS
-      aspect: [4, 3],
-    });
-  
-    if (result.cancelled) {
+  render() {
+    const { route } = this.props;
+    let {
+      image
+    } = this.state;
+
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="default" />
+
+        
+        <Button onPress={this._takePhoto} title="Take a photo" />
+
+        {this._maybeRenderImage()}
+        {this._maybeRenderUploadingOverlay()}
+      </View>
+    );
+  }
+
+  _maybeRenderUploadingOverlay = () => {
+    if (this.state.uploading) {
+      return (
+        <View
+          style={[StyleSheet.absoluteFill, styles.maybeRenderUploading]}>
+          <ActivityIndicator color="#fff" size="large" />
+        </View>
+      );
+    }
+  };
+
+  _maybeRenderImage = () => {
+    let {
+      image
+    } = this.state;
+
+    if (!image) {
       return;
     }
-    console.log('before fetching uri')
-  
-    let localUri = result.uri;
+
+    return (
+      <View
+        style={styles.maybeRenderContainer}>
+        <View
+          style={styles.maybeRenderImageContainer}>
+          <Image source={{ uri: image }} style={styles.maybeRenderImage} />
+        </View>
+
+        <Text
+          onPress={this._copyToClipboard}
+          onLongPress={this._share}
+          style={styles.maybeRenderImageText}>
+          {image}
+        </Text>
+      </View>
+    );
+  };
+
+  _share = () => {
+    Share.share({
+      message: this.state.image,
+      title: 'Check out this photo',
+      url: this.state.image,
+    });
+  };
+
+  _copyToClipboard = () => {
+    Clipboard.setString(this.state.image);
+    alert('Copied image URL to clipboard');
+  };
+
+  _takePhoto = async () => {
+    
+
+    // only if user allows permission to camera AND camera roll
+    if (true) {
+      let pickerResult = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+      });
+
+      this._handleImagePicked(pickerResult);
+    }
+  };
+
+  _pickImage = async () => {
+    const {
+      status: cameraRollPerm
+    } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+    // only if user allows permission to camera roll
+    if (cameraRollPerm === 'granted') {
+      let pickerResult = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+      });
+
+      this._handleImagePicked(pickerResult);
+    }
+  };
+
+  _handleImagePicked = async pickerResult => {
+    let uploadResponse, uploadResult;
+
+    try {
+      this.setState({
+        uploading: true
+      });
+
+      if (!pickerResult.cancelled) {
+        uploadResponse = await uploadImageAsync(pickerResult.uri);
+        uploadResult = await uploadResponse.json();
+
+        this.setState({
+          image: uploadResult.location
+        });
+        console.log('try')
+      }
+    } catch (e) {
+      console.log('catch')
+      console.log({ uploadResponse });
+      console.log({ uploadResult });
+      console.log({ e });
+      Alert.alert('Attendence Locked Successfully :)');
+    } finally {
+      this.setState({
+        uploading: false
+      });
+    }
+  };
+}
+
+async function uploadImageAsync(uri) {
+  let apiUrl = 'https://8000-anshulakotiya-sihgail-o32qjuu43i7.ws-us38.gitpod.io/userAttendance/';
+
+  // Note:
+  // Uncomment this if you want to experiment with local server
+  //
+  // if (Constants.isDevice) {
+  //   apiUrl = `https://your-ngrok-subdomain.ngrok.io/upload`;
+  // } else {
+  //   apiUrl = `http://localhost:3000/upload`
+  // }
+
+    let localUri = uri;
     let filename = localUri.split('/').pop();
   
     let match = /\.(\w+)$/.exec(filename);
@@ -25,36 +172,79 @@ async function TakePhotoAndUpload() {
     console.log('picture has been')
   
     let formData = new FormData();
-    // formData.append('photo', { uri: localUri, name: filename, type });
-    formData.append('emp_no', 'anugrah');
-    formData.append('latitude','24.74865' );
-    formData.append('longitude', '74.5879424');
+    formData.append('photo', { uri: localUri, name: filename, type });
+    formData.append('emp_no', '19mim10051');
+    formData.append('latitude','24.891658812430144' );
+    formData.append('longitude', '79.58416122544095');
   
-    return await fetch('https://sih-gail.herokuapp.com/userAttendance/', {
+    return await fetch('https://8000-anshulakotiya-sihgail-o32qjuu43i7.ws-us38.gitpod.io/userAttendance/', {
       method: 'POST',
       body: formData,
       header: {
         'content-type': 'multipart/form-data',
       },
       
-    }).then((response) => {
+    })
+    .then((response) => {
       console.log(response);
     if(response.data.status === 'attendance locked')
     {
       Alert.alert("Attendence Locked successfully .");
-      navigation.navigate('Afterlogin')
-    }else if(response.data.status === 'error'){
-      if(response.data.data === 'out of polygon'){
+      navigation.navigate('Afterlogin');
+    }else if(response.data.status === 'out of polygon'){
         Alert.alert('Please Be in the campus');
       }
-      else{
+      else if(response.data.status === 'Unknown Person'){
         Alert.alert('face not detected');
       }
-    }
+    
       }).catch((error) => {
         console.error(error);
       })
   }
 
 
-export default TakePhotoAndUpload
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  exampleText: {
+    fontSize: 20,
+    marginBottom: 20,
+    marginHorizontal: 15,
+    textAlign: 'center',
+  },
+  maybeRenderUploading: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+  },
+  maybeRenderContainer: {
+    borderRadius: 3,
+    elevation: 2,
+    marginTop: 30,
+    shadowColor: 'rgba(0,0,0,1)',
+    shadowOpacity: 0.2,
+    shadowOffset: {
+      height: 4,
+      width: 4,
+    },
+    shadowRadius: 5,
+    width: 250,
+  },
+  maybeRenderImageContainer: {
+    borderTopLeftRadius: 3,
+    borderTopRightRadius: 3,
+    overflow: 'hidden',
+  },
+  maybeRenderImage: {
+    height: 250,
+    width: 250,
+  },
+  maybeRenderImageText: {
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  }
+});

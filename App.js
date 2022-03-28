@@ -6,9 +6,10 @@ import Homepage from './components/homepage'
 import AfterLogin from './components/afterlogin';
 import Attendencerecord from './components/attendencerecord';
 import LoginPage from './components/loginform';
-import Face_detector from './components/facedetection';
+// import Face_detector from './components/facedetection';
 import VerificationPage from './components/verificationpage';
 import TakePhotoAndUpload from './components/uploadpicture';
+import Timeofattendence from './components/timeofattendence';
 
 
 const Stack = createNativeStackNavigator();
@@ -22,9 +23,10 @@ const MyStack = () => {
       <Stack.Screen name='Afterlogin' component={AfterLogin}/>
       <Stack.Screen name='Record' component={Attendencerecord}/>
       <Stack.Screen name='Login' component={LoginPage}/>
-      <Stack.Screen name='facedetector' component={Face_detector}/>
+      {/* <Stack.Screen name='facedetector' component={Face_detector}/> */}
       <Stack.Screen name='verification' component={VerificationPage}/>
       <Stack.Screen name='uploadpicture' component={TakePhotoAndUpload}/>
+      <Stack.Screen name='timeofattendence' component={Timeofattendence}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -53,13 +53,12 @@ if (hasPermission === false) {
     <View style={styles.container}>
         <Text style={styles.infotext}>Welcome</Text>
         <View style={styles.button1}>
-          <Button style={styles.markattendence} title='Mark Attendence'  onPress={() => navigation.navigate('facedetector',{userno:route.params.user,locate:location})} />
+          <Button style={styles.markattendence} title='Mark Attendence'  onPress={() => navigation.navigate('timeofattendence',{userno:route.params.user, locate:location})} />
         </View>
         <View style={styles.button2}>
-          <Button style={styles.attendencerecord} title='Attendence Record' onPress={() => navigation.navigate('Record')}/>
+          <Button style={styles.attendencerecord} title='Attendence Record' onPress={() => navigation.navigate('Record',{userno:route.params.user})}/>
         </View>
     </View>
-
   );
 }
 
