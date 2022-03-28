@@ -10,11 +10,9 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Alert,
 } from 'react-native';
 import { Constants, Permissions } from 'expo';
 import * as ImagePicker from 'expo-image-picker';
-
 export default class TakePhotoAndUpload extends Component {
   state = {
     image: null,
@@ -22,7 +20,6 @@ export default class TakePhotoAndUpload extends Component {
   };
 
   render() {
-    const { route } = this.props;
     let {
       image
     } = this.state;
@@ -132,18 +129,16 @@ export default class TakePhotoAndUpload extends Component {
       if (!pickerResult.cancelled) {
         uploadResponse = await uploadImageAsync(pickerResult.uri);
         uploadResult = await uploadResponse.json();
-
+        console.log(uploadResult); //Here you can get the detail
         this.setState({
           image: uploadResult.location
         });
-        console.log('try')
       }
     } catch (e) {
-      console.log('catch')
       console.log({ uploadResponse });
       console.log({ uploadResult });
       console.log({ e });
-      Alert.alert('Attendence Locked Successfully :)');
+      alert('Upload failed, sorry :(');
     } finally {
       this.setState({
         uploading: false
@@ -173,7 +168,7 @@ async function uploadImageAsync(uri) {
   
     let formData = new FormData();
     formData.append('photo', { uri: localUri, name: filename, type });
-    formData.append('emp_no', '19mim10051');
+    formData.append('emp_no', 'a');
     formData.append('latitude','24.891658812430144' );
     formData.append('longitude', '79.58416122544095');
   
@@ -185,24 +180,7 @@ async function uploadImageAsync(uri) {
       },
       
     })
-    .then((response) => {
-      console.log(response);
-    if(response.data.status === 'attendance locked')
-    {
-      Alert.alert("Attendence Locked successfully .");
-      navigation.navigate('Afterlogin');
-    }else if(response.data.status === 'out of polygon'){
-        Alert.alert('Please Be in the campus');
-      }
-      else if(response.data.status === 'Unknown Person'){
-        Alert.alert('face not detected');
-      }
-    
-      }).catch((error) => {
-        console.error(error);
-      })
-  }
-
+}
 
 const styles = StyleSheet.create({
   container: {

@@ -17,10 +17,10 @@ const Homepage =  ({ navigation })=>  {
         <Button title='Signup'
              onPress={() =>navigation.navigate('Employeeform') }/>
         </View>
-        {/* <View style={styles.button2}>
+        <View style={styles.button2}>
         <Button title='face'
              onPress={() =>navigation.navigate('uploadpicture') }/>
-        </View> */}
+        </View>
       </View>
 
 
